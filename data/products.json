@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Rice (1 kg)",
+    "price": 55,
+    "stock": 50
+  },
+  {
+    "id": 2,
+    "name": "Egg (1 pc)",
+    "price": 9,
+    "stock": 120
+  },
+  {
+    "id": 3,
+    "name": "Instant Noodles",
+    "price": 15,
+    "stock": 79
+  },
+  {
+    "id": 4,
+    "name": "Coffee Sachet",
+    "price": 8,
+    "stock": 99
+  },
+  {
+    "id": 5,
+    "name": "Bottled Water",
+    "price": 20,
+    "stock": 60
+  },
+  {
+    "id": 6,
+    "name": "Soy Sauce",
+    "price": 18,
+    "stock": 40
+  }
+]

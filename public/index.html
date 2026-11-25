@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simple POS System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🛒 Simple POS System</h1>
+    <nav>
+      <button class="tab-btn active" data-tab="sale">New Sale</button>
+      <button class="tab-btn" data-tab="products">Products</button>
+      <button class="tab-btn" data-tab="report">Sales Report</button>
+    </nav>
+  </header>
+
+  <div id="message" class="message hidden"></div>
+
+  <main>
+    <!-- ===== NEW SALE ===== -->
+    <section id="tab-sale" class="tab">
+      <div class="sale-layout">
+        <div class="panel">
+          <h2>Products</h2>
+          <input type="text" id="searchInput" placeholder="Search product...">
+          <div id="productGrid" class="grid"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Cart</h2>
+          <div id="cartList"></div>
+          <div class="total-row">
+            <span>Total</span>
+            <strong id="cartTotal">₱0.00</strong>
+          </div>
+          <label for="paidInput">Customer payment</label>
+          <input type="number" id="paidInput" min="0" step="0.01" placeholder="0.00">
+          <p id="changeText" class="change-text"></p>
+          <button id="checkoutBtn" class="btn primary full">Checkout</button>
+          <button id="clearCartBtn" class="btn full">Clear Cart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRODUCTS ===== -->
+    <section id="tab-products" class="tab hidden">
+      <div class="panel">
+        <h2>Add Product</h2>
+        <div class="form-row">
+          <input type="text" id="newName" placeholder="Product name">
+          <input type="number" id="newPrice" min="0" step="0.01" placeholder="Price">
+          <input type="number" id="newStock" min="0" step="1" placeholder="Stock">
+          <button id="addProductBtn" class="btn primary">Add</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>All Products</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="productsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REPORT ===== -->
+    <section id="tab-report" class="tab hidden">
+      <div class="stats">
+        <div class="stat"><span>Number of sales</span><strong id="statCount">0</strong></div>
+        <div class="stat"><span>Total sales</span><strong id="statTotal">₱0.00</strong></div>
+      </div>
+
+      <div class="panel">
+        <h2>Sales History</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Date</th><th>Items</th><th>Total</th></tr>
+            </thead>
+            <tbody id="reportTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== RECEIPT POPUP ===== -->
+  <div id="receiptModal" class="modal hidden">
+    <div class="modal-box">
+      <div id="receiptContent"></div>
+      <div class="modal-buttons">
+        <button id="printBtn" class="btn primary">Print</button>
+        <button id="closeReceiptBtn" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

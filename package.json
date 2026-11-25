@@ -1,0 +1,15 @@
+{
+  "name": "pos-system",
+  "version": "2.0.0",
+  "description": "A beginner-friendly Point of Sale (POS) system with a website, built with Node.js",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "cli": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["pos", "nodejs", "beginner", "website"],
+  "license": "MIT"
+}
