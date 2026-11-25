@@ -13,7 +13,7 @@ async function newSale() {
   console.log('\n--- NEW SALE ---');
 
   while (true) {
-    printProducts(products.getAll());
+    printProducts(await products.getAll());
     const idText = await ask('Enter product ID (or type "done" to checkout, "cancel" to stop): ');
 
     if (idText.toLowerCase() === 'cancel') {
@@ -23,7 +23,7 @@ async function newSale() {
     }
     if (idText.toLowerCase() === 'done') break;
 
-    const product = products.findById(Number(idText));
+    const product = await products.findById(Number(idText));
     if (!product) {
       console.log('  Product not found. Try again.');
       continue;
@@ -72,9 +72,11 @@ async function checkout() {
   const change = Math.round((paid - total) * 100) / 100;
 
   // Reduce the stock of every item sold
-  cart.getItems().forEach((item) => products.changeStock(item.id, -item.qty));
+  for (const item of cart.getItems()) {
+    await products.changeStock(item.id, -item.qty);
+  }
 
-  const sale = sales.save(cart.getItems(), total, paid, change);
+  const sale = await sales.save(cart.getItems(), total, paid, change);
   printReceipt(sale);
   cart.clear();
 }
@@ -93,15 +95,15 @@ async function addProduct() {
     console.log('Price and stock must not be negative (stock must be a whole number).');
     return;
   }
-  const product = products.add(name, price, stock);
+  const product = await products.add(name, price, stock);
   console.log(`Added "${product.name}" with ID ${product.id}.`);
 }
 
 async function restockProduct() {
   console.log('\n--- RESTOCK PRODUCT ---');
-  printProducts(products.getAll());
+  printProducts(await products.getAll());
   const id = await askNumber('Product ID: ');
-  const product = products.findById(id);
+  const product = await products.findById(id);
   if (!product) {
     console.log('Product not found.');
     return;
@@ -111,27 +113,27 @@ async function restockProduct() {
     console.log('Amount must be a whole number greater than 0.');
     return;
   }
-  products.changeStock(id, amount);
+  await products.changeStock(id, amount);
   console.log(`Done. ${product.name} stock is now ${product.stock + amount}.`);
 }
 
 async function removeProduct() {
   console.log('\n--- REMOVE PRODUCT ---');
-  printProducts(products.getAll());
+  printProducts(await products.getAll());
   const id = await askNumber('Product ID to remove: ');
   const confirm = await ask('Are you sure? (y/n): ');
   if (confirm.toLowerCase() !== 'y') {
     console.log('Cancelled.');
     return;
   }
-  console.log(products.remove(id) ? 'Product removed.' : 'Product not found.');
+  console.log((await products.remove(id)) ? 'Product removed.' : 'Product not found.');
 }
 
 // ---------- SALES REPORT ----------
-function showReport() {
+async function showReport() {
   console.log('\n--- SALES REPORT ---');
-  const all = sales.getAll();
-  const summary = sales.getSummary();
+  const all = await sales.getAll();
+  const summary = await sales.getSummary();
   if (all.length === 0) {
     console.log('No sales yet.');
     return;
@@ -165,11 +167,11 @@ async function main() {
 
     switch (choice) {
       case '1': await newSale(); break;
-      case '2': printProducts(products.getAll()); break;
+      case '2': printProducts(await products.getAll()); break;
       case '3': await addProduct(); break;
       case '4': await restockProduct(); break;
       case '5': await removeProduct(); break;
-      case '6': showReport(); break;
+      case '6': await showReport(); break;
       case '0': running = false; break;
       default: console.log('Invalid option. Please choose 0-6.');
     }

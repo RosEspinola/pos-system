@@ -1,5 +1,7 @@
 node_modules/
 .DS_Store
 .env
-# Sales records are created when you run the app; keep them out of Git
+.env*.local
+.vercel
+# Sales records are created when you run the app locally; keep them out of Git
 data/sales.json

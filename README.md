@@ -2,7 +2,7 @@
 
 A beginner-friendly **Point of Sale (POS)** system that runs as a **website** in your browser.
 The backend is built with Node.js using only built-in modules, so there is **nothing to install**.
-Data is saved in simple JSON files.
+It works on your computer (JSON files) and on **Vercel** (Upstash Redis database).
 
 > A terminal version is also included (`npm run cli`).
 
@@ -21,7 +21,7 @@ Data is saved in simple JSON files.
 
 - [Node.js](https://nodejs.org) version 18 or newer (check with `node -v`)
 
-## How to Run
+## Run on Your Computer
 
 ```bash
 git clone https://github.com/<your-username>/pos-system.git
@@ -29,40 +29,44 @@ cd pos-system
 npm start
 ```
 
-Then open your browser and go to:
-
-```
-http://localhost:3000
-```
-
+Open your browser and go to `http://localhost:3000`.
 Press `Ctrl + C` in the terminal to stop the server.
 
-To use a different port:
+## Deploy to Vercel
 
-```bash
-# Mac / Linux
-PORT=4000 npm start
+Vercel cannot save files, so the online version stores data in a free **Upstash Redis** database.
 
-# Windows (Command Prompt)
-set PORT=4000 && npm start
-```
+1. Push this project to GitHub.
+2. Go to [vercel.com](https://vercel.com) and log in with GitHub.
+3. Click **Add New > Project**, choose the `pos-system` repository, and click **Import**.
+4. Set **Framework Preset** to **Other**. Leave the build settings empty. Click **Deploy**.
+5. In your Vercel project, open the **Storage** tab, create an **Upstash for Redis** database (free plan), and **connect it to the project**. Vercel adds the variables `KV_REST_API_URL` and `KV_REST_API_TOKEN` automatically.
+6. Go to **Deployments**, open the menu (**...**) on the latest deployment, and click **Redeploy**.
+7. Open your link, for example `https://pos-system.vercel.app`.
+
+The first time, the database is empty, so the app loads the starting products from `data/products.json`.
+
+If the website shows **"Database is not connected"**, do steps 5 and 6.
 
 ## Folder Structure
 
 ```
 pos-system/
+├── api/
+│   └── [...path].js      # Vercel runs this file for every /api/... request
 ├── data/
-│   ├── products.json     # list of products (name, price, stock)
-│   └── sales.json        # created automatically after the first sale
+│   ├── products.json     # starting products (name, price, stock)
+│   └── sales.json        # created locally after the first sale
 ├── public/               # the website (what the browser shows)
 │   ├── index.html        # page layout
 │   ├── style.css         # design
 │   └── app.js            # website logic (cart, buttons, fetch calls)
 ├── src/                  # the Node.js backend
-│   ├── server.js         # web server + API routes
+│   ├── api.js            # all API routes (products, checkout, sales)
+│   ├── server.js         # local web server (npm start)
 │   ├── products.js       # add, find, restock, remove products
 │   ├── sales.js          # save sales and make the report
-│   ├── storage.js        # read/write JSON files
+│   ├── storage.js        # saves data: JSON files locally, Redis on Vercel
 │   ├── cart.js           # cart (terminal version only)
 │   ├── utils.js          # helpers (terminal version only)
 │   └── index.js          # terminal version
@@ -74,11 +78,12 @@ pos-system/
 
 ## How It Works
 
-1. You open `http://localhost:3000`. `server.js` sends `index.html`, `style.css`, and `app.js`.
+1. You open the website. The server (or Vercel) sends `index.html`, `style.css`, and `app.js`.
 2. `app.js` asks the server for the products using `fetch('/api/products')`.
 3. You click products. The cart is kept in the browser.
 4. On **Checkout**, the browser sends the cart and payment to `/api/checkout`.
-5. The server checks the stock and payment, lowers the stock, saves the sale, and sends back the receipt.
+5. `api.js` checks the stock and payment, lowers the stock, saves the sale, and sends back the receipt.
+6. `storage.js` saves the data in a JSON file (local) or in Upstash Redis (Vercel).
 
 ## API Routes
 
@@ -96,7 +101,7 @@ pos-system/
 - Add a cashier login
 - Add discounts (for example, 10% off)
 - Export the sales report to CSV
-- Use Express and a real database (SQLite or MongoDB)
+- Use Express and a bigger database (MongoDB or PostgreSQL)
 
 ## License
 
