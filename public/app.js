@@ -371,6 +371,18 @@ async function loadReport() {
   }
 }
 
+// Clear all sales history
+$('clearSalesBtn').addEventListener('click', async () => {
+  if (!confirm('Clear ALL sales history? This cannot be undone.')) return;
+  try {
+    await api('/api/sales', 'DELETE');
+    showMessage('Sales history cleared.');
+    loadReport();
+  } catch (err) {
+    showMessage(err.message, 'error');
+  }
+});
+
 // ---------- start ----------
 renderCart();
 loadProducts();

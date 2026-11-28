@@ -3,12 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>Simple POS System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🛒 Sherelyn Store</h1>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8h12l-1 12H7L6 8z"/>
+          <path d="M9 8V7a3 3 0 0 1 6 0v1"/>
+        </svg>
+      </span>
+      <h1>TinTin Store</h1>
+    </div>
     <nav>
       <button class="tab-btn active" data-tab="sale">New Sale</button>
       <button class="tab-btn" data-tab="products">Products</button>
@@ -16,19 +28,19 @@
     </nav>
   </header>
 
-  <div id="message" class="message hidden"></div>
+  <div id="message" class="message hidden" role="status" aria-live="polite"></div>
 
   <main>
     <!-- ===== NEW SALE ===== -->
     <section id="tab-sale" class="tab">
       <div class="sale-layout">
-        <div class="panel">
+        <div class="panel products-panel">
           <h2>Products</h2>
-          <input type="text" id="searchInput" placeholder="Search product...">
+          <input type="text" id="searchInput" placeholder="Search product..." autocomplete="off">
           <div id="productGrid" class="grid"></div>
         </div>
 
-        <div class="panel">
+        <div class="panel cart-panel">
           <h2>Cart</h2>
           <div id="cartList"></div>
           <div class="total-row">
@@ -36,7 +48,7 @@
             <strong id="cartTotal">₱0.00</strong>
           </div>
           <label for="paidInput">Customer payment</label>
-          <input type="number" id="paidInput" min="0" step="0.01" placeholder="0.00">
+          <input type="number" id="paidInput" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
           <p id="changeText" class="change-text"></p>
           <button id="checkoutBtn" class="btn primary full">Checkout</button>
           <button id="clearCartBtn" class="btn full">Clear Cart</button>
@@ -59,7 +71,7 @@
       <div class="panel">
         <h2>All Products</h2>
         <div class="table-wrap">
-          <table>
+          <table class="t-products">
             <thead>
               <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
             </thead>
@@ -77,9 +89,12 @@
       </div>
 
       <div class="panel">
-        <h2>Sales History</h2>
+        <div class="panel-head">
+          <h2>Sales History</h2>
+          <button id="clearSalesBtn" class="btn small danger">Clear History</button>
+        </div>
         <div class="table-wrap">
-          <table>
+          <table class="t-report">
             <thead>
               <tr><th>#</th><th>Date</th><th>Items</th><th>Total</th></tr>
             </thead>

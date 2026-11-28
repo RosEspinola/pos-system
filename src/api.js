@@ -2,7 +2,7 @@
 // All the API routes of the POS (products, checkout, sales).
 // It is used by BOTH:
 //   - src/server.js          (running on your computer)
-//   - api/[...path].js       (running on Vercel)
+//   - api/index.js             (running on Vercel)
 
 const products = require('./products');
 const sales = require('./sales');
@@ -159,6 +159,12 @@ async function handleApi(req, res, pathname) {
         summary: await sales.getSummary(),
         sales: allSales.reverse(), // newest first
       });
+    }
+
+    // DELETE /api/sales -> clear the sales history
+    if (pathname === '/api/sales' && method === 'DELETE') {
+      await sales.clear();
+      return sendJSON(res, 200, { message: 'Sales history cleared.' });
     }
 
     sendJSON(res, 404, { error: 'Not found.' });

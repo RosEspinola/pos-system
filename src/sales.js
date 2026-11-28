@@ -34,4 +34,9 @@ async function getSummary() {
   };
 }
 
-module.exports = { getAll, save, getSummary };
+// Deletes all sales history (the next sale starts again at #1)
+async function clear() {
+  await writeJSON(FILE, []);
+}
+
+module.exports = { getAll, save, getSummary, clear };
