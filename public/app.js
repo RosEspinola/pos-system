@@ -125,7 +125,7 @@ function renderCart() {
         </div>
         <div class="qty-box">
           <button data-action="dec" data-id="${item.id}">-</button>
-          <span>${item.qty}</span>
+          <input type="number" class="qty-input" min="1" step="1" value="${item.qty}" data-id="${item.id}">
           <button data-action="inc" data-id="${item.id}">+</button>
           <button data-action="remove" data-id="${item.id}">x</button>
         </div>
@@ -159,6 +159,36 @@ $('cartList').addEventListener('click', (event) => {
     cart = cart.filter((i) => i.id !== id);
   }
   renderCart();
+});
+
+// Type a quantity directly in the box (press Enter or click outside)
+$('cartList').addEventListener('change', (event) => {
+  const input = event.target.closest('.qty-input');
+  if (!input) return;
+
+  const id = Number(input.dataset.id);
+  const item = cart.find((i) => i.id === id);
+  const product = products.find((p) => p.id === id);
+  if (!item || !product) return;
+
+  const qty = Number(input.value);
+
+  if (input.value === '' || !Number.isInteger(qty)) {
+    showMessage('Quantity must be a whole number.', 'error');
+  } else if (qty <= 0) {
+    cart = cart.filter((i) => i.id !== id); // 0 removes the item
+  } else if (qty > product.stock) {
+    item.qty = product.stock; // use the most we have
+    showMessage(`Only ${product.stock} ${product.name} in stock.`, 'error');
+  } else {
+    item.qty = qty;
+  }
+  renderCart();
+});
+
+// Select the number when you click the box, so you can type right away
+$('cartList').addEventListener('focusin', (event) => {
+  if (event.target.classList.contains('qty-input')) event.target.select();
 });
 
 // Shows the change (or "not enough") while typing the payment

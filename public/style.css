@@ -118,6 +118,14 @@ label { font-size: 13px; color: #475569; display: block; margin-top: 12px; margi
   border-radius: 4px;
   cursor: pointer;
 }
+.qty-box .qty-input {
+  width: 58px;
+  height: 28px;
+  padding: 2px 4px;
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+}
 .empty { color: #94a3b8; font-size: 14px; padding: 10px 0; }
 
 .total-row {
