@@ -22,7 +22,7 @@ function checkSetup() {
   }
 }
 
-// Sends one command to Upstash, for example ["GET", "pos:products-abc.json"]
+// Sends one command to Upstash, for example ["GET", "pos:products.json"]
 async function redis(command) {
   const response = await fetch(REST_URL, {
     method: 'POST',
@@ -36,9 +36,9 @@ async function redis(command) {
   return data.result;
 }
 
-// The starting products. A new account gets these the first time.
+// The starting products. Used the first time, when the database is still empty.
 function getSeed(fileName) {
-  if (fileName.startsWith('products-')) {
+  if (fileName === 'products.json') {
     return JSON.parse(JSON.stringify(require('../data/products.json')));
   }
   return null;
@@ -58,8 +58,7 @@ async function readJSON(fileName, fallback) {
 
   const filePath = path.join(DATA_DIR, fileName);
   if (!fs.existsSync(filePath)) {
-    const seed = getSeed(fileName);
-    return seed !== null ? seed : fallback;
+    return fallback;
   }
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
